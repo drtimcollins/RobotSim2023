@@ -12,16 +12,8 @@ var dmode = dispMode.DESIGN;
 
 var camera, scene, renderer, gui, clk, cpp;
 
-//const sceneParams = {width:1280, height:720, sf:{x:640,y:643}, name:'simpleTrack'};
-//const sceneParams = {width:1280, height:720, sf:{x:640,y:597}, name:'basicTrack'};
-//const sceneParams = {width:1280, height:720, sf:{x:640,y:663}, name:'hairPinTrack'};
-//const sceneParams = {width:1280, height:720, sf:{x:640,y:663}, name:'twistyTrack'};
-//const sceneParams = {width:1280, height:720, sf:{x:640,y:645}, name:'uTrack'};
-
 const sceneParams = [{width:1280, height:720, sf:{x:640,y:643}, name:'simpleTrack'},
-//                    {width:1280, height:720, sf:{x:640,y:645}, name:'uTrack'},
                     {width:1280, height:720, sf:{x:640,y:642}, name:'hairPin2022'},
-                    //{width:1280, height:720, sf:{x:640,y:663}, name:'twistyTrack'}];
                     {width:1280, height:720, sf:{x:640,y:661}, name:'twisty2022'}];
 
 var robotParams = {
@@ -35,14 +27,11 @@ var splitTime, splitFrameCount;
 var scenes, cpps;
 
 // Start-up initialisation
-$(function(){
-//    $('#progress').hide();
-    
+$(function(){  
     editor = ace.edit("editor");
     editor.setTheme("ace/theme/eclipse");
     editor.session.setMode("ace/mode/c_cpp");
     editor.setShowPrintMargin(false);	
-
    
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.shadowMap.enabled = true;
@@ -57,7 +46,6 @@ $(function(){
     }
     scene = scenes[0];
 
-//    scene = new RobotScene(sceneParams, onTrackLoaded);   
     robot = new RobotSim(scene, robotParams);    
     camera = new SmartCam(scene, robot);
     camera.change(6);
@@ -65,7 +53,6 @@ $(function(){
     clk = new THREE.Clock(false);
     gui = new RobotGui(onIconClicked);
     cpp = cpps[0];
-    //cpp = new RobotCompiler();
 
     $('.runButton').prop('disabled', true);
     $('#guiWin').hide();
@@ -88,7 +75,6 @@ $(function(){
     $("#selectFiles").bind('input',function(e) {
        console.log("IINPUTT");
     });
-    //	 $("#progress").show();
 
     onResize();
     update(0);
@@ -201,7 +187,6 @@ function getTimeString(ms){
     for(var n = 0; n < 6; n++){
         let d = (n==3) ? 6 : 10;
         let z1 = Math.floor(z/d);
-        //digits[5-n].setNum(z - z1*d);
         ts = ((n==1 || n == 3)?':':'') + (z - z1*d) + ts;
         z = z1;
     }
@@ -233,7 +218,6 @@ function batchRun(){
             $('#coutBox').text('');
 
             var idNum = -1;
-//            var idNum = 47;
             var trNum = 2;
             var isDone = true;
 
@@ -314,7 +298,6 @@ function runCode(trackIndex){
                     splitFrameCount = -50;
                     clk.stop();
                     clk.elapsedTime = 0;
-                    //console.log(clk.getElapsedTime());
                     $('#guiWin').show();
                     $('#designerWin').hide();            
                     parent.postMessage(0, "*");   // Scroll to top
@@ -323,15 +306,12 @@ function runCode(trackIndex){
                     scene = scenes[trackIndex];
                     robot.changeScene(scene);
                     camera.changeScene(scene);
-                    //robot.shape.visible = true;
                 } else { // Report Errors
                     var errs = data.Errors;
-                    //var regex = /source.cpp:(\d+):/g
                     var regex = /main\.cpp:(\d+):/g
                     var match;
                     while ((match = regex.exec(errs)) != null) {
                         let ln = parseInt(match[1]) - 143;
-                        //errs = errs.substr(0,match.index+11)+ln.toString()+errs.substr(match.index+11+match[1].length);
                         errs = errs.substr(0,match.index+9)+ln.toString()+errs.substr(match.index+9+match[1].length);
                         regex.lastIndex += match[1].length - ln.toString().length;
                     }

@@ -184,8 +184,8 @@ class Digit extends Two.Group{
         el._collection.forEach(element => {
             element.x *= 0.9;
             element.y *= 0.9;
-            element.x -= (element.y + el._translation.y) / skewFactor;    
-        });
+            element.x -= (element.y + el.position.y) / skewFactor;    
+    });
     }
     setNum(z){
         for(var n = 0; n < 7; n++){
