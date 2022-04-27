@@ -33,7 +33,7 @@ class RobotShape extends THREE.Group{
             this.body1.position.set(0, 0, -20);
             this.body1.castShadow = true;
             // body2 - wedge connecting wheels to sensor bar
-            var body2g = new THREE.Geometry();
+            var body2g = new THREE.BufferGeometry();
             body2g.vertices.push(new THREE.Vector3(20, this.robotWidth/2-5, -10));
             body2g.vertices.push(new THREE.Vector3(20, this.robotWidth/2-5, -30));
             body2g.vertices.push(new THREE.Vector3(this.robotLength, 5, -10));
