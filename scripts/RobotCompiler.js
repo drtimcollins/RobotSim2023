@@ -6,15 +6,18 @@ class RobotCompiler{
     }    
 	init(par){
 		// Find track Bounds
-		let minmax = [par.track[0].x,par.track[0].y,par.track[0].x,par.track[0].y]; // [minx,miny,maxx,maxy]
+        let minmax = [par.bbox.min.x, par.bbox.min.y, par.bbox.max.x, par.bbox.max.y];
+//		let minmax = [par.track[0].x,par.track[0].y,par.track[0].x,par.track[0].y]; // [minx,miny,maxx,maxy]
         let startIndex = 0;
-        let bestD2 = (par.track[0].x - par.start.x)*(par.track[0].x - par.start.x) + (par.track[0].y - par.start.y)*(par.track[0].y - par.start.y);
+        let bestD2 = par.track[0].distanceToSquared(par.start);
+//        let bestD2 = (par.track[0].x - par.start.x)*(par.track[0].x - par.start.x) + (par.track[0].y - par.start.y)*(par.track[0].y - par.start.y);
 		par.track.forEach(p => {
-			if(p.x < minmax[0]) minmax[0] = p.x;
+/*			if(p.x < minmax[0]) minmax[0] = p.x;
 			if(p.y < minmax[1]) minmax[1] = p.y;
 			if(p.x > minmax[2]) minmax[2] = p.x;
-			if(p.y > minmax[3]) minmax[3] = p.y;
-            let d2 = (p.x - par.start.x)*(p.x - par.start.x) + (p.y - par.start.y)*(p.y - par.start.y);
+			if(p.y > minmax[3]) minmax[3] = p.y;*/
+            let d2 = p.distanceToSquared(par.start);
+//            let d2 = (p.x - par.start.x)*(p.x - par.start.x) + (p.y - par.start.y)*(p.y - par.start.y);
             if(d2 < bestD2){
                 startIndex = par.track.indexOf(p);
                 bestD2 = d2;

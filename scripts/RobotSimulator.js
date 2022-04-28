@@ -12,9 +12,9 @@ var dmode = dispMode.DESIGN;
 
 var camera, scene, renderer, gui, clk, cpp;
 
-const sceneParams = [{width:1280, height:720, sf:{x:640,y:643}, name:'simpleTrack'},
-                    {width:1280, height:720, sf:{x:640,y:642}, name:'hairPin2022'},
-                    {width:1280, height:720, sf:{x:640,y:661}, name:'twisty2022'}];
+const sceneParams = [{width:1280, height:720, sf: new THREE.Vector2(640,643), name:'simpleTrack'},
+                    {width:1280, height:720, sf: new THREE.Vector2(640,642), name:'hairPin2022'},
+                    {width:1280, height:720, sf: new THREE.Vector2(640,661), name:'twisty2022'}];
 
 var robotParams = {
     width: 95,
@@ -121,10 +121,11 @@ function onTrackLoaded(){
     console.log("Track Loaded");
     if(scenes[0].isLoaded && scenes[1].isLoaded && scenes[2].isLoaded){
         for(let i = 0; i < 3; i++){
+            scenes[i].trackLine.geometry.computeBoundingBox();
             var vertices = [];
             for(let n = 0; n < scenes[i].trackLine.geometry.getAttribute("position").array.length/3; n++)
                 vertices.push(new THREE.Vector2(scenes[i].trackLine.geometry.getAttribute("position").array[n*3], scenes[i].trackLine.geometry.getAttribute("position").array[n*3+1]));
-            cpps[i].init({track: vertices, start: sceneParams[i].sf, robot: robotParams});
+            cpps[i].init({track: vertices, start: sceneParams[i].sf, robot: robotParams, bbox: scenes[i].trackLine.geometry.boundingBox});
         }
         $('.runButton').prop('disabled', false);
     }

@@ -53,10 +53,10 @@ class RobotScene extends THREE.Scene{
 
         this.trackMesh.add(this.makeStartFinish(params.sf));
 
-        this.turntableMat = [new THREE.MeshPhongMaterial({color:0x205020, shininess:5, specular: 0xFFFFFF, shading: THREE.SmoothShading }),
-            new THREE.MeshPhongMaterial({color:0xFF0000, shininess:5, specular: 0xFFFFFF, shading: THREE.SmoothShading })];
+        this.turntableMat = [new THREE.MeshPhongMaterial({color:0x205020, shininess:5, specular: 0xFFFFFF }),
+            new THREE.MeshPhongMaterial({color:0xFF0000, shininess:5, specular: 0xFFFFFF })];
         this.turntable = new THREE.Mesh(new THREE.CylinderGeometry( 130, 130, 30, 64 ), 
-                        new THREE.MeshPhongMaterial({color:0xD0D0B0, shininess:5, specular: 0xFFFFFF, shading: THREE.SmoothShading }));
+                        new THREE.MeshPhongMaterial({color:0xD0D0B0, shininess:5, specular: 0xFFFFFF }));
         this.turntableTop = new THREE.Mesh(new THREE.CylinderGeometry( 100, 100, 2, 64 ), this.turntableMat[0]);
         this.turntable.rotateX(Math.PI/2);
         this.turntableTop.rotateX(Math.PI/2);
