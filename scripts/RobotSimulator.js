@@ -35,7 +35,7 @@ $(function(){
    
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+//    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.domElement.id = "threeDrenderer"
 
@@ -120,10 +120,12 @@ function onIconClicked(i){
 function onTrackLoaded(){
     console.log("Track Loaded");
     if(scenes[0].isLoaded && scenes[1].isLoaded && scenes[2].isLoaded){
-        for(let i = 0; i < 3; i++)
-            cpps[i].init({track: scenes[i].trackLine.geometry.vertices,
-                start: sceneParams[i].sf,
-                robot: robotParams});
+        for(let i = 0; i < 3; i++){
+            var vertices = [];
+            for(let n = 0; n < scenes[i].trackLine.geometry.getAttribute("position").array.length/3; n++)
+                vertices.push(new THREE.Vector2(scenes[i].trackLine.geometry.getAttribute("position").array[n*3], scenes[i].trackLine.geometry.getAttribute("position").array[n*3+1]));
+            cpps[i].init({track: vertices, start: sceneParams[i].sf, robot: robotParams});
+        }
         $('.runButton').prop('disabled', false);
     }
 }

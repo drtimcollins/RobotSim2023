@@ -37,14 +37,14 @@ class RobotScene extends THREE.Scene{
 
         this.trackMesh = new THREE.Group();
         // White Base
-        var g = new THREE.Geometry();
-        g.vertices.push(new THREE.Vector3(0,0,0.5));
-        g.vertices.push(new THREE.Vector3(0,params.height,0.5));
-        g.vertices.push(new THREE.Vector3(params.width,params.height,0.5));
-        g.vertices.push(new THREE.Vector3(params.width,0,0.5));
-        g.faces.push(new THREE.Face3(0,2,3));
-        g.faces.push(new THREE.Face3(2,0,1));
-        g.computeFaceNormals();    
+        var g = new THREE.BufferGeometry();
+        g.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+            0,0,0.5,0,params.height,0.5,
+            params.width,params.height,0.5,params.width,0,0.5
+            ]), 3));
+        g.setAttribute('normal', new THREE.BufferAttribute(new Float32Array([0,0,-1,0,0,-1,0,0,-1,0,0,-1]), 3));
+        g.setIndex([0,2,3,2,0,1]);
+        //g.computeFaceNormals();    
         var material = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
         var baseMesh = new THREE.Mesh(g, material);
         baseMesh.receiveShadow = true;
@@ -67,7 +67,7 @@ class RobotScene extends THREE.Scene{
         this.add(this.turntable);
         this.add(this.turntableTop);
         
-        this.gridHelper = new THREE.GridHelper(600, 12, 0x00FF00, 0x409040);
+        this.gridHelper = new THREE.GridHelper(1200, 12, 0x00FF00, 0x409040);
         this.gridHelper.rotateX(Math.PI/2);
         this.gridHelper.position.set(params.width/2, params.height/2,32);
         this.add( this.gridHelper );
@@ -75,8 +75,9 @@ class RobotScene extends THREE.Scene{
 
         // Track
         var loader = new THREE.PLYLoader();
-        loader.load('img/'+params.name+'.ply', function(geometry) {    
-                geometry.computeFaceNormals();
+        loader.load('img/'+params.name+'.ply', function(geometry) {
+            geometry.computeVertexNormals();  
+                //geometry.computeFaceNormals();
             var trackMat = new THREE.MeshLambertMaterial({color: 0x000000});
             this.trackLine = new THREE.Mesh(geometry, trackMat);
             this.trackLine.receiveShadow = true;
@@ -92,17 +93,15 @@ class RobotScene extends THREE.Scene{
         this.startFinish = new THREE.Group();
         const geometry = new THREE.BufferGeometry();
         const vertices = new Float32Array( [-8,  32, 0, 8, 32, 0, 8,  -32, 0, -8,  -32, 0, -8,  32, 0]);        
-        geometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+        geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
         const line = new THREE.Line( geometry, new THREE.MeshLambertMaterial( { color: 0x000000 } ) );
         this.startFinish.add(line);
-        const g = new THREE.Geometry();
-        g.vertices.push(new THREE.Vector3(0,0,0));
-        g.vertices.push(new THREE.Vector3(0,8,0));
-        g.vertices.push(new THREE.Vector3(8,8,0));
-        g.vertices.push(new THREE.Vector3(8,0,0));
-        g.faces.push(new THREE.Face3(0,2,3));
-        g.faces.push(new THREE.Face3(2,0,1));
-        g.computeFaceNormals();    
+        const g = new THREE.BufferGeometry();
+        const vertices2 = new Float32Array([0,0,0,0,8,0,8,8,0,8,0,0]);        
+        g.setAttribute('position', new THREE.BufferAttribute(vertices2, 3));
+        g.setIndex([0,2,3,2,0,1]);
+        g.setAttribute('normal', new THREE.BufferAttribute(new Float32Array([0,0,-1,0,0,-1,0,0,-1,0,0,-1]), 3));
+        //g.computeFaceNormals();    
         const bSquare = new THREE.Mesh(g, new THREE.MeshLambertMaterial({ color: 0x000000 }));
         bSquare.receiveShadow = true;
         const wSquare = new THREE.Mesh(g, new THREE.MeshLambertMaterial({ color: 0xFFFFFF }));

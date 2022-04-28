@@ -9,7 +9,7 @@ class SmartCam extends THREE.PerspectiveCamera{
         this.trackHeight = scene.height;
         this.robot = robot;
 
-        this.camTarget = new THREE.Mesh( new THREE.CubeGeometry(1,1,0.1));
+        this.camTarget = new THREE.Mesh( new THREE.BoxGeometry(1,1,0.1));
         this.camTarget.position.set(this.trackWidth/2, this.trackHeight/2,1);
         scene.add(this.camTarget);    
 
