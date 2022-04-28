@@ -56,11 +56,11 @@ class RobotShape extends THREE.Group{
             this.body3.castShadow = true;
             // body4/5 - caster
             this.body4 = new THREE.Mesh(new THREE.SphereGeometry(5, 12, 8,  0, 2*Math.PI, 0, Math.PI/2), 
-                new THREE.MeshPhongMaterial({color: 0xd0d0d0, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  }));
+                new THREE.MeshPhongMaterial({color: 0xd0d0d0, specular: 0x505050, shininess: 100 }));
             this.body4.rotateX(Math.PI/2);
             this.body4.position.set(this.robotLength - 20, 0, -5);
             this.body5 = new THREE.Mesh(new THREE.CylinderGeometry(5.5,5.5,5.5,12),
-                new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  }));
+                new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100  }));
             this.body5.rotateX(-Math.PI/2);
             this.body5.position.set(this.robotLength - 20, 0, -7.5);
 
@@ -79,7 +79,7 @@ class RobotShape extends THREE.Group{
             var sensorLEDMesh = new THREE.Mesh(sensorLEDg, this.sensorLEDMat);
             sensorLEDMesh.rotateX(-Math.PI/2);
             var sensorBoxg = new THREE.BoxGeometry(8, 5, 5);
-            var sensorBoxMat =  new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
+            var sensorBoxMat =  new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100 });
             var sensorBoxMesh = new THREE.Mesh(sensorBoxg, sensorBoxMat);
             for(var n = 0; n < MAXSENSORS; n++){
                 var sensorN = sensorLEDMesh.clone();
@@ -98,7 +98,7 @@ class RobotShape extends THREE.Group{
     }
 
     setBodyColour(c){
-        this.bodyMat = new THREE.MeshPhongMaterial({color: c, specular: 0x505050, shininess: 10, shading: THREE.FlatShading  });
+        this.bodyMat = new THREE.MeshPhongMaterial({color: c, specular: 0x505050, shininess: 10, flatShading: true  });
         if(this.isLoaded){
             this.body1.material = this.bodyMat;
             this.body2.material = this.bodyMat;
@@ -106,34 +106,36 @@ class RobotShape extends THREE.Group{
         }
     }
     setWheelColour(c){
-        this.wheelMat = new THREE.MeshLambertMaterial({reflectivity: 1, shading: THREE.FlatShading , color: c});
+        this.wheelMat = new THREE.MeshLambertMaterial({reflectivity: 1, color: c});
+        this.wheelMat.flatShading = false;
         if(this.isLoaded){
             this.Rw.material = this.wheelMat;
             this.Lw.material = this.wheelMat;
         }
     }
+    
     setLEDColour(c){
         this.LEDColour = c;
         switch(c){
             case "red":
-                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x600000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
-                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x600000, emissive: 0xFF0000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
+                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x600000, specular: 0x505050, shininess: 100  });
+                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x600000, emissive: 0xFF0000, specular: 0x505050, shininess: 100  });
                 break;
             case "yellow":
-                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x604000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
-                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x604000, emissive: 0xA0A000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
+                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x604000, specular: 0x505050, shininess: 100  });
+                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x604000, emissive: 0xA0A000, specular: 0x505050, shininess: 100  });
                 break;
             case "green":
-                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x004000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
-                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x004000, emissive: 0x00A000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
+                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x004000, specular: 0x505050, shininess: 100  });
+                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x004000, emissive: 0x00A000, specular: 0x505050, shininess: 100  });
                 break;
             case "blue":
-                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x000070, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
-                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x00070, emissive: 0x0060FF, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
+                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x000070, specular: 0x505050, shininess: 100  });
+                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x00070, emissive: 0x0060FF, specular: 0x505050, shininess: 100  });
                 break;
             default:
-                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
-                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x000000, emissive: 0x000000, specular: 0x505050, shininess: 100, shading: THREE.SmoothShading  });
+                this.sensorLEDMat =  new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100  });
+                this.sensorLEDMatOn =  new THREE.MeshPhongMaterial({color: 0x000000, emissive: 0x000000, specular: 0x505050, shininess: 100  });
                 break;
         }
         this.refreshLEDs();
