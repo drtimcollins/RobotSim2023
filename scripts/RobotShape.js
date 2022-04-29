@@ -13,88 +13,105 @@ class RobotShape extends THREE.Group{
         //this.visible = false;
         this.checkSize();
 
-        // Load wheel model and make wheels when loaded
-        var loader = new THREE.PLYLoader();
-        loader.load('img/wheel.ply', function(geometry) {
-            geometry.computeVertexNormals();
-            //geometry.computeFaceNormals();
-            this.setWheelColour(0x444444);
-            this.Rw = new THREE.Mesh(geometry, this.wheelMat);
-            this.Rw.rotateX(-Math.PI/2);
-            this.Lw = this.Rw.clone();
-            this.Rw.position.set(0,this.robotWidth/2,-20);
-            this.Lw.position.set(0,-this.robotWidth/2,-20);
-            this.Rw.castShadow=true;
-            this.Lw.castShadow=true;
-            // body1 - box between the wheels
-            //this.bodyMat = new THREE.MeshPhongMaterial({color: 0x2070D0, specular: 0x505050, shininess: 10, shading: THREE.SmoothShading  });
-            this.setBodyColour(0x2070D0);
-            var body1g = new THREE.BoxGeometry(40, this.robotWidth-10, 20);
-            this.body1 = new THREE.Mesh(body1g, this.bodyMat);
-            this.body1.position.set(0, 0, -20);
-            this.body1.castShadow = true;
-            // body2 - wedge connecting wheels to sensor bar
-            var body2g = new THREE.BufferGeometry();
 
-            body2g.setAttribute('position', new THREE.BufferAttribute( new Float32Array([
-                20, this.robotWidth/2-5, -10,
-                20, this.robotWidth/2-5, -30,
-                this.robotLength, 5, -10,
-                this.robotLength, -5, -10,
-                20, -this.robotWidth/2+5, -30,
-                20, -this.robotWidth/2+5, -10    
-            ]), 3 ) );
-            body2g.setIndex([0,2,1,3,1,2,3,4,1,3,5,4,0,5,3,0,3,2]);
-            body2g.computeVertexNormals();
-            //body2g.computeFaceNormals();
-            this.body2 = new THREE.Mesh(body2g, this.bodyMat);
-            this.body2.castShadow = true;
-            // body3 - sensor bar
-            var body3g = new THREE.BoxGeometry(14, 14 + this.SensorSpacing*(this.NumberOfSensors-1), 3);
-            this.body3 = new THREE.Mesh(body3g, this.bodyMat);
-            this.body3.position.set(this.robotLength, 0, -10);
-            this.body3.castShadow = true;
-            // body4/5 - caster
-            this.body4 = new THREE.Mesh(new THREE.SphereGeometry(5, 12, 8,  0, 2*Math.PI, 0, Math.PI/2), 
-                new THREE.MeshPhongMaterial({color: 0xd0d0d0, specular: 0x505050, shininess: 100 }));
-            this.body4.rotateX(Math.PI/2);
-            this.body4.position.set(this.robotLength - 20, 0, -5);
-            this.body5 = new THREE.Mesh(new THREE.CylinderGeometry(5.5,5.5,5.5,12),
-                new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100  }));
-            this.body5.rotateX(-Math.PI/2);
-            this.body5.position.set(this.robotLength - 20, 0, -7.5);
+        // Make wheel from primitives...
+        const wheelRim = new THREE.Shape();
+        wheelRim.absellipse(0,0,20,20,0,Math.PI);
+        wheelRim.absellipse(0,0,20,20,Math.PI,2*Math.PI);   
+        const innerRim = new THREE.Path();
+        innerRim.absellipse(0,0,15,15);
+        wheelRim.holes = [innerRim];
+        const extrudeSettings = { depth: 8};
+        const hub = new THREE.CylinderGeometry(3,3,4,12);
+        hub.rotateX(Math.PI/2);
+        const gArray = [new THREE.ExtrudeGeometry(wheelRim, extrudeSettings),
+                    hub.toNonIndexed()];
+        gArray[0].translate(0,0,-4);
+        let spokes = [];
+        for(let n = 0; n < 5; n++){
+            spokes.push(new THREE.CylinderGeometry(1.5,1.5,15,8));
+            spokes[n].translate(0,8,0);
+            spokes[n].rotateZ(n*Math.PI*0.4);
+            spokes[n] = spokes[n].toNonIndexed();
+        }
+        var geometry = THREE.BufferGeometryUtils.mergeBufferGeometries(gArray.concat(spokes));
+        this.setWheelColour(0x444444);
+        this.Rw = new THREE.Mesh(geometry, this.wheelMat);
+        this.Rw.rotateX(-Math.PI/2);
+        this.Lw = this.Rw.clone();
+        this.Rw.position.set(0,this.robotWidth/2,-20);
+        this.Lw.position.set(0,-this.robotWidth/2,-20);
+        this.Rw.castShadow=true;
+        this.Lw.castShadow=true;
 
-            this.add(this.body1);
-            this.add(this.body2);
-            this.add(this.body3);
-            this.add(this.body4);
-            this.add(this.body5);
-            this.add(this.Lw);    
-            this.add(this.Rw);    
-            
-            this.sensors = [];
-            this.sensorBoxes = [];
-            var sensorLEDg = new THREE.SphereGeometry(4, 12, 8, 0, 2*Math.PI, 0, Math.PI/2);
-            this.setLEDColour('red');
-            var sensorLEDMesh = new THREE.Mesh(sensorLEDg, this.sensorLEDMat);
-            sensorLEDMesh.rotateX(-Math.PI/2);
-            var sensorBoxg = new THREE.BoxGeometry(8, 5, 5);
-            var sensorBoxMat =  new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100 });
-            var sensorBoxMesh = new THREE.Mesh(sensorBoxg, sensorBoxMat);
-            for(var n = 0; n < MAXSENSORS; n++){
-                var sensorN = sensorLEDMesh.clone();
-                sensorN.position.set(this.robotLength, (n - (this.NumberOfSensors-1.0)/2.0)*this.SensorSpacing, -11.5);
-                this.sensors.push(sensorN);
-                var sensorBoxN = sensorBoxMesh.clone();
-                sensorBoxN.position.set(this.robotLength, (n - (this.NumberOfSensors-1.0)/2.0)*this.SensorSpacing, -7);
-                this.sensorBoxes.push(sensorBoxN);
-                this.sensors[n].visible = (n < this.NumberOfSensors);
-                this.sensorBoxes[n].visible = (n < this.NumberOfSensors);
-                this.add(this.sensors[n]);
-                this.add(this.sensorBoxes[n]);                
-            }
-            this.isLoaded = true;  
-        }.bind(this) , function() {});       
+        // body1 - box between the wheels
+        //this.bodyMat = new THREE.MeshPhongMaterial({color: 0x2070D0, specular: 0x505050, shininess: 10, shading: THREE.SmoothShading  });
+        this.setBodyColour(0x2070D0);
+        var body1g = new THREE.BoxGeometry(40, this.robotWidth-10, 20);
+        this.body1 = new THREE.Mesh(body1g, this.bodyMat);
+        this.body1.position.set(0, 0, -20);
+        this.body1.castShadow = true;
+        // body2 - wedge connecting wheels to sensor bar
+        var body2g = new THREE.BufferGeometry();
+
+        body2g.setAttribute('position', new THREE.BufferAttribute( new Float32Array([
+            20, this.robotWidth/2-5, -10,
+            20, this.robotWidth/2-5, -30,
+            this.robotLength, 5, -10,
+            this.robotLength, -5, -10,
+            20, -this.robotWidth/2+5, -30,
+            20, -this.robotWidth/2+5, -10    
+        ]), 3 ) );
+        body2g.setIndex([0,2,1,3,1,2,3,4,1,3,5,4,0,5,3,0,3,2]);
+        body2g.computeVertexNormals();
+        //body2g.computeFaceNormals();
+        this.body2 = new THREE.Mesh(body2g, this.bodyMat);
+        this.body2.castShadow = true;
+        // body3 - sensor bar
+        var body3g = new THREE.BoxGeometry(14, 14 + this.SensorSpacing*(this.NumberOfSensors-1), 3);
+        this.body3 = new THREE.Mesh(body3g, this.bodyMat);
+        this.body3.position.set(this.robotLength, 0, -10);
+        this.body3.castShadow = true;
+        // body4/5 - caster
+        this.body4 = new THREE.Mesh(new THREE.SphereGeometry(5, 12, 8,  0, 2*Math.PI, 0, Math.PI/2), 
+            new THREE.MeshPhongMaterial({color: 0xd0d0d0, specular: 0x505050, shininess: 100 }));
+        this.body4.rotateX(Math.PI/2);
+        this.body4.position.set(this.robotLength - 20, 0, -5);
+        this.body5 = new THREE.Mesh(new THREE.CylinderGeometry(5.5,5.5,5.5,12),
+            new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100  }));
+        this.body5.rotateX(-Math.PI/2);
+        this.body5.position.set(this.robotLength - 20, 0, -7.5);
+
+        this.add(this.body1);
+        this.add(this.body2);
+        this.add(this.body3);
+        this.add(this.body4);
+        this.add(this.body5);
+        this.add(this.Lw);    
+        this.add(this.Rw);    
+        
+        this.sensors = [];
+        this.sensorBoxes = [];
+        var sensorLEDg = new THREE.SphereGeometry(4, 12, 8, 0, 2*Math.PI, 0, Math.PI/2);
+        this.setLEDColour('red');
+        var sensorLEDMesh = new THREE.Mesh(sensorLEDg, this.sensorLEDMat);
+        sensorLEDMesh.rotateX(-Math.PI/2);
+        var sensorBoxg = new THREE.BoxGeometry(8, 5, 5);
+        var sensorBoxMat =  new THREE.MeshPhongMaterial({color: 0x000000, specular: 0x505050, shininess: 100 });
+        var sensorBoxMesh = new THREE.Mesh(sensorBoxg, sensorBoxMat);
+        for(var n = 0; n < MAXSENSORS; n++){
+            var sensorN = sensorLEDMesh.clone();
+            sensorN.position.set(this.robotLength, (n - (this.NumberOfSensors-1.0)/2.0)*this.SensorSpacing, -11.5);
+            this.sensors.push(sensorN);
+            var sensorBoxN = sensorBoxMesh.clone();
+            sensorBoxN.position.set(this.robotLength, (n - (this.NumberOfSensors-1.0)/2.0)*this.SensorSpacing, -7);
+            this.sensorBoxes.push(sensorBoxN);
+            this.sensors[n].visible = (n < this.NumberOfSensors);
+            this.sensorBoxes[n].visible = (n < this.NumberOfSensors);
+            this.add(this.sensors[n]);
+            this.add(this.sensorBoxes[n]);                
+        }
+        this.isLoaded = true;  
     }
 
     setBodyColour(c){
