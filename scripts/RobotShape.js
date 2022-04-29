@@ -21,12 +21,13 @@ class RobotShape extends THREE.Group{
         const innerRim = new THREE.Path();
         innerRim.absellipse(0,0,15,15);
         wheelRim.holes = [innerRim];
-        const extrudeSettings = { depth: 8};
+        const extrudeSettings = { depth: 6,	bevelEnabled: true,
+            bevelThickness: 1, bevelSize: 1, bevelOffset: 0, bevelSegments: 1};
         const hub = new THREE.CylinderGeometry(3,3,4,12);
         hub.rotateX(Math.PI/2);
         const gArray = [new THREE.ExtrudeGeometry(wheelRim, extrudeSettings),
                     hub.toNonIndexed()];
-        gArray[0].translate(0,0,-4);
+        gArray[0].translate(0,0,-3);
         let spokes = [];
         for(let n = 0; n < 5; n++){
             spokes.push(new THREE.CylinderGeometry(1.5,1.5,15,8));
@@ -47,25 +48,14 @@ class RobotShape extends THREE.Group{
         // body1 - box between the wheels
         //this.bodyMat = new THREE.MeshPhongMaterial({color: 0x2070D0, specular: 0x505050, shininess: 10, shading: THREE.SmoothShading  });
         this.setBodyColour(0x2070D0);
-        var body1g = new THREE.BoxGeometry(40, this.robotWidth-10, 20);
+        /*var body1g = new THREE.BoxGeometry(40, this.robotWidth-10, 20);
         this.body1 = new THREE.Mesh(body1g, this.bodyMat);
         this.body1.position.set(0, 0, -20);
-        this.body1.castShadow = true;
+        this.body1.castShadow = true;*/
         // body2 - wedge connecting wheels to sensor bar
-        var body2g = new THREE.BufferGeometry();
 
-        body2g.setAttribute('position', new THREE.BufferAttribute( new Float32Array([
-            20, this.robotWidth/2-5, -10,
-            20, this.robotWidth/2-5, -30,
-            this.robotLength, 5, -10,
-            this.robotLength, -5, -10,
-            20, -this.robotWidth/2+5, -30,
-            20, -this.robotWidth/2+5, -10    
-        ]), 3 ) );
-        body2g.setIndex([0,2,1,3,1,2,3,4,1,3,5,4,0,5,3,0,3,2]);
-        body2g.computeVertexNormals();
         //body2g.computeFaceNormals();
-        this.body2 = new THREE.Mesh(body2g, this.bodyMat);
+        this.body2 = new THREE.Mesh(this.makeBodyGeometry(), this.bodyMat);
         this.body2.castShadow = true;
         // body3 - sensor bar
         var body3g = new THREE.BoxGeometry(14, 14 + this.SensorSpacing*(this.NumberOfSensors-1), 3);
@@ -82,7 +72,7 @@ class RobotShape extends THREE.Group{
         this.body5.rotateX(-Math.PI/2);
         this.body5.position.set(this.robotLength - 20, 0, -7.5);
 
-        this.add(this.body1);
+        //this.add(this.body1);
         this.add(this.body2);
         this.add(this.body3);
         this.add(this.body4);
@@ -114,10 +104,31 @@ class RobotShape extends THREE.Group{
         this.isLoaded = true;  
     }
 
+    makeBodyGeometry(){
+        var body2g = new THREE.BufferGeometry();
+        body2g.setAttribute('position', new THREE.BufferAttribute( new Float32Array([
+            20, this.robotWidth/2-5, -10, //0
+            20, this.robotWidth/2-5, -30, //1
+            this.robotLength, 5, -10,   //2
+            this.robotLength, -5, -10,  //3
+            20, -this.robotWidth/2+5, -30,  //4
+            20, -this.robotWidth/2+5, -10,  //5
+            -20, this.robotWidth/2-5, -30,  //6
+            -20, -this.robotWidth/2+5, -30,   //7
+            -20, this.robotWidth/2-5, -10,  //8
+            -20, -this.robotWidth/2+5, -10   //9
+        ]), 3 ) );
+        body2g.setIndex([0,2,1, 3,1,2, 3,4,1, 3,5,4, 0,5,3, 0,3,2, 1,7,6, 4,7,1, 7,4,9, 5,9,4,
+            6,8,1, 0,1,8, 6,7,8, 7,9,8]);
+        body2g.computeVertexNormals();
+        return body2g;
+    }
+
     setBodyColour(c){
-        this.bodyMat = new THREE.MeshPhongMaterial({color: c, specular: 0x505050, shininess: 10, flatShading: true  });
+        //this.bodyMat = new THREE.MeshPhongMaterial({color: c, specular: 0x505050, shininess: 50});// 10, flatShading: true  });
+        this.bodyMat = new THREE.MeshPhysicalMaterial({color: c, roughness: 0.35, metalness: 0.1, reflectivity: 0.15});
         if(this.isLoaded){
-            this.body1.material = this.bodyMat;
+            //this.body1.material = this.bodyMat;
             this.body2.material = this.bodyMat;
             this.body3.material = this.bodyMat;
         }
@@ -171,23 +182,14 @@ class RobotShape extends THREE.Group{
             this.robotLength = params.length;
             this.NumberOfSensors = params.NumberOfSensors;
             this.SensorSpacing = params.SensorSpacing;
-            this.checkSize();            
-            this.body1.geometry = new THREE.BoxGeometry(40, this.robotWidth-10, 20);
-            var body2g = new THREE.BufferGeometry();
-            body2g.setAttribute('position', new THREE.BufferAttribute( new Float32Array([
-                20, this.robotWidth/2-5, -10,
-                20, this.robotWidth/2-5, -30,
-                this.robotLength, 5, -10,
-                this.robotLength, -5, -10,
-                20, -this.robotWidth/2+5, -30,
-                20, -this.robotWidth/2+5, -10    
-            ]), 3 ) );
-            body2g.setIndex([0,2,1,3,1,2,3,4,1,3,5,4,0,5,3,0,3,2]);
-            body2g.computeVertexNormals();
-            //body2g.computeFaceNormals();
-            this.body2.geometry = body2g;       
+            this.checkSize();     
+            /*this.body1.geometry.dispose();       
+            this.body1.geometry = new THREE.BoxGeometry(40, this.robotWidth-10, 20);*/
+            this.body2.geometry.dispose();
+            this.body2.geometry = this.makeBodyGeometry();       
             this.Rw.position.set(0,this.robotWidth/2,-20);
             this.Lw.position.set(0,-this.robotWidth/2,-20);                 
+            this.body3.geometry.dispose();
             this.body3.geometry = new THREE.BoxGeometry(14, 14 + this.SensorSpacing*(this.NumberOfSensors-1), 3);
             this.body3.position.set(this.robotLength, 0, -10);
             this.body4.position.set(this.robotLength - 20, 0, -5);

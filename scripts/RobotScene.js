@@ -33,6 +33,7 @@ class RobotScene extends THREE.Scene{
             this.lights[n].target.position.set(params.width/2, params.height/2,0);
         }
         this.add( new THREE.AmbientLight(0xC8C8C8));
+//        this.add( new THREE.AmbientLight(0xFFFFFF));
 
 
         this.trackMesh = new THREE.Group();
