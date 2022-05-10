@@ -7,7 +7,8 @@ class RobotSim {
         this.length = params.length;
         this.NumberOfSensors = params.NumberOfSensors;
         this.SensorSpacing = params.SensorSpacing;
-        this.shape = new RobotShape(this.width, this.length, this.NumberOfSensors,  this.SensorSpacing);     
+        this.WheelRadius = params.WheelRadius;
+        this.shape = new RobotShape(this.width, this.length, this.NumberOfSensors,  this.SensorSpacing, this.WheelRadius);     
         this.shape.position.set(scene.width/2 - this.shape.xOffset, scene.height/2, 0);
 
         this.scene = scene;        

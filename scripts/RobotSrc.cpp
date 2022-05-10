@@ -83,12 +83,12 @@ int main(){
 	for(int n = 0; n < 3000; n++){
 		updateSensors();
 		RobotControlCode::RobotControl();
-		//av = av*0.9 + speed*0.1;
-		av = av*0.92 + speed*0.08;
+		//av = av*0.9 + speed*0.1;	
+		av = av*0.92 + speed*0.08;	// angular velocity is av rad/frame or 50av rad/s
 		//av = av*0.95 + speed*0.05;
 		//av = av*0.97 + speed*0.03;
-		vv = bearing * (real(av) + imag(av))/2.0;
-		bearing *= exp(j*((real(av)-imag(av))/width));
+		vv = bearing * (double)WheelRadius*(real(av) + imag(av))/2.0;
+		bearing *= exp(j*(double)WheelRadius*((real(av)-imag(av))/width));
 		cFront = xy + bearing * (double)rlength;
 		while(abs(cFront - track[(iTrack+ISTART)%N]) < 150.0){
 			iTrack++;
@@ -103,8 +103,8 @@ int main(){
 		}
 
 		xy += vv;
-		L *= exp(-j*(real(av)/20.0));
-		R *= exp(-j*(imag(av)/20.0));
+		L *= exp(-j*(real(av)));	// wheel speed is av rad/frame = 50av rad/s
+		R *= exp(-j*(imag(av)));
 		cout << toHex() << endl;
 	}
 	delete[] track;
@@ -130,9 +130,9 @@ void Set_PWM(int n, double spNew){
 	int spI = ((int)spNew) & 0x1FFF;
 	double sp = (double)spI;
 	if(n == 0)
-		speed = complex<double>(sp / 800.0, imag(speed));
+		speed = complex<double>(sp / 16000.0, imag(speed));
 	else
-		speed = complex<double>(real(speed), sp / 800.0);
+		speed = complex<double>(real(speed), sp / 16000.0);
 }
 namespace RobotControlCode{
 #define ROBOTCONTROLFUNCTION

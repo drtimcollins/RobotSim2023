@@ -71,6 +71,7 @@ class RobotScene extends THREE.Scene{
         this.gridHelper = new THREE.GridHelper(1200, 12, 0x00FF00, 0x409040);
         this.gridHelper.rotateX(Math.PI/2);
         this.gridHelper.position.set(params.width/2, params.height/2,32);
+//        this.gridHelper.position.set(params.width/2, params.height/2,-.5);
         this.add( this.gridHelper );
 
 

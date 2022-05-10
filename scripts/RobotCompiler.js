@@ -51,6 +51,7 @@ class RobotCompiler{
                 + "\n#define rlength " + cpp.bot.length.toString()
                 + "\n#define NumberOfSensors " + cpp.bot.NumberOfSensors.toString()
                 + "\n#define SensorSpacing " + cpp.bot.SensorSpacing.toString()
+                + "\n#define WheelRadius " + cpp.bot.WheelRadius.toString()
                 + "\n#define XSTART " + (cpp.start.x-cpp.bot.length).toString()
                 + "\n#define YSTART " + (cpp.start.y).toString()
                 + "\n#define ISTART " + (cpp.startIndex).toString());

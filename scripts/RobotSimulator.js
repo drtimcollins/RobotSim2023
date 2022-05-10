@@ -20,7 +20,8 @@ var robotParams = {
     width: 95,
     length: 100,
     NumberOfSensors: 1,
-    SensorSpacing: 15};
+    SensorSpacing: 15,
+    WheelRadius: 20};
 var robot, rec, laps, editor;
 var lastTime, bestTime, isRaceOver;
 var splitTime, splitFrameCount;
@@ -88,7 +89,8 @@ function onSliderChanged(){
     robotParams.length = parseFloat($('#sliderLength').val());
     robotParams.width = parseFloat($('#sliderWidth').val());
     robotParams.SensorSpacing = parseFloat($('#sliderSpacing').val());
-    robotParams.NumberOfSensors = parseFloat($('#sliderNumSensors').val());    
+    robotParams.NumberOfSensors = parseFloat($('#sliderNumSensors').val()); 
+    robotParams.WheelRadius = parseFloat($('#sliderWheelDiameter').val()) / 2;   
     robot.shape.setSize(robotParams);
 }
 
@@ -339,9 +341,10 @@ function downloadDesign(){
     var robotParameters = {
         width: robotParams.width,
         length: robotParams.length,
+        WheelRadius: robotParams.WheelRadius,
         NumberOfSensors: robotParams.NumberOfSensors,
         SensorSpacing: robotParams.SensorSpacing,
-        BodyColour: robot.shape.body1.material.color.getHexString(),
+        BodyColour: robot.shape.body2.material.color.getHexString(),
         WheelColour: robot.shape.Rw.material.color.getHexString(),
         LEDColour: robot.shape.LEDColour,
         Code: editor.getValue()
@@ -362,16 +365,20 @@ function uploadDesign(event){
     var reader = new FileReader();
     reader.onload = function(event){
         var o = JSON.parse(event.target.result);
+        if(o.WheelRadius == undefined) o.WheelRadius = 20;
         $('#sliderLength').val(o.length);
         $('#inputLength').val(o.length);
         $('#sliderWidth').val(o.width);
-        $('#inputWidth').val(o.width);
+        $('#inputWidth').val(o.width);        
+        $('#sliderWheelRadius').val(o.WheelRadius);
+        $('#inputWheelRadius').val(o.WheelRadius);                
         $('#sliderSpacing').val(o.SensorSpacing);
         $('#inputSpacing').val(o.SensorSpacing);
         $('#sliderNumSensors').val(o.NumberOfSensors);
         $('#inputNumSensors').val(o.NumberOfSensors);
         robotParams.width = o.width;
         robotParams.length = o.length;
+        robotParams.WheelRadius = o.WheelRadius;
         robotParams.NumberOfSensors = o.NumberOfSensors;
         robotParams.SensorSpacing = o.SensorSpacing;
         robot.shape.setSize(robotParams);

@@ -1,58 +1,32 @@
 import { MAXSENSORS } from './RobotSimulator.js';
 
 class RobotShape extends THREE.Group{
-    constructor(width, length, numSens, sensSpace){
+    constructor(width, length, numSens, sensSpace, wheelRad){
         super();
         this.robotWidth  = width;
         this.robotLength = length;
         this.NumberOfSensors = numSens;
         this.SensorSpacing = sensSpace;
+        this.WheelRadius = wheelRad;
         this.LEDColour = "red";
         this.isLoaded = false;
         this.sizeOK = true;
         //this.visible = false;
         this.checkSize();
 
-
-        // Make wheel from primitives...
-        const wheelRim = new THREE.Shape();
-        wheelRim.absellipse(0,0,20,20,0,Math.PI);
-        wheelRim.absellipse(0,0,20,20,Math.PI,2*Math.PI);   
-        const innerRim = new THREE.Path();
-        innerRim.absellipse(0,0,15,15);
-        wheelRim.holes = [innerRim];
-        const extrudeSettings = { depth: 4,	bevelEnabled: true,
-            bevelThickness: 1, bevelSize: 1, bevelOffset: 0, bevelSegments: 1};
-        const hub = new THREE.CylinderGeometry(3,3,4,12);
-        hub.rotateX(Math.PI/2);
-        const gArray = [new THREE.ExtrudeGeometry(wheelRim, extrudeSettings),
-                    hub.toNonIndexed()];
-        gArray[0].translate(0,0,-2);
-        let spokes = [];
-        for(let n = 0; n < 5; n++){
-            spokes.push(new THREE.CylinderGeometry(1.5,1.5,15,8));
-            spokes[n].translate(0,8,0);
-            spokes[n].rotateZ(n*Math.PI*0.4);
-            spokes[n] = spokes[n].toNonIndexed();
-        }
-        var geometry = THREE.BufferGeometryUtils.mergeBufferGeometries(gArray.concat(spokes));
+        var geometry = this.makeWheelGeometry();
         this.setWheelColour(0x444444);
         this.Rw = new THREE.Mesh(geometry, this.wheelMat);
         this.Rw.rotateX(-Math.PI/2);
         this.Lw = this.Rw.clone();
-        this.Rw.position.set(0,this.robotWidth/2,-20);
-        this.Lw.position.set(0,-this.robotWidth/2,-20);
+        this.Rw.position.set(0,this.robotWidth/2,-this.WheelRadius);
+        this.Lw.position.set(0,-this.robotWidth/2,-this.WheelRadius);
         this.Rw.castShadow=true;
         this.Lw.castShadow=true;
 
         this.setBodyColour(0x2070D0);
         this.body2 = new THREE.Mesh(this.makeBodyGeometry(), this.bodyMat);
         this.body2.castShadow = true;
-        // body3 - sensor bar
-/*        var body3g = new THREE.BoxGeometry(14, 14 + this.SensorSpacing*(this.NumberOfSensors-1), 3);
-        this.body3 = new THREE.Mesh(body3g, this.bodyMat);
-        this.body3.position.set(this.robotLength, 0, -10);
-        this.body3.castShadow = true;*/
         // body4/5 - caster
         this.body4 = new THREE.Mesh(new THREE.SphereGeometry(5, 12, 8,  0, 2*Math.PI, 0, Math.PI/2), 
             new THREE.MeshPhongMaterial({color: 0xd0d0d0, specular: 0x505050, shininess: 100 }));
@@ -63,9 +37,7 @@ class RobotShape extends THREE.Group{
         this.body5.rotateX(-Math.PI/2);
         this.body5.position.set(this.robotLength - 20, 0, -7.5);
 
-        //this.add(this.body1);
         this.add(this.body2);
-//        this.add(this.body3);
         this.add(this.body4);
         this.add(this.body5);
         this.add(this.Lw);    
@@ -97,17 +69,15 @@ class RobotShape extends THREE.Group{
 
     makeBodyGeometry(){
         var body2g = new THREE.BufferGeometry();
-//        this.body3.geometry = new THREE.BoxGeometry(14, 14 + this.SensorSpacing*(this.NumberOfSensors-1), 3);
-//        this.body3.position.set(this.robotLength, 0, -10);
         body2g.setAttribute('position', new THREE.BufferAttribute( new Float32Array([
             20, this.robotWidth/2-5, -10, //0
-            20, this.robotWidth/2-5, -30, //1
+            20, this.robotWidth/2-5, -this.WheelRadius-10, //1
             this.robotLength-7, 5, -11.5,   //2
             this.robotLength-7, -5, -11.5,  //3
-            20, -this.robotWidth/2+5, -30,  //4
+            20, -this.robotWidth/2+5, -this.WheelRadius-10,  //4
             20, -this.robotWidth/2+5, -10,  //5
-            -20, this.robotWidth/2-5, -30,  //6
-            -20, -this.robotWidth/2+5, -30,   //7
+            -20, this.robotWidth/2-5, -this.WheelRadius-10,  //6
+            -20, -this.robotWidth/2+5, -this.WheelRadius-10,   //7
             -20, this.robotWidth/2-5, -10,  //8
             -20, -this.robotWidth/2+5, -10,   //9
             this.robotLength-7, -7-this.SensorSpacing*(this.NumberOfSensors-1)/2, -11.5,
@@ -128,14 +98,36 @@ class RobotShape extends THREE.Group{
         return body2g;
     }
 
+    makeWheelGeometry(){
+        // Make wheel from primitives...
+        const wheelRim = new THREE.Shape();
+        wheelRim.absellipse(0,0,this.WheelRadius,this.WheelRadius,0,Math.PI);
+        wheelRim.absellipse(0,0,this.WheelRadius,this.WheelRadius,Math.PI,2*Math.PI);   
+        const innerRim = new THREE.Path();
+        innerRim.absellipse(0,0,this.WheelRadius-5,this.WheelRadius-5);
+        wheelRim.holes = [innerRim];
+        const extrudeSettings = { depth: 4,	bevelEnabled: true,
+            bevelThickness: 1, bevelSize: 1, bevelOffset: 0, bevelSegments: 1};
+        const hub = new THREE.CylinderGeometry(this.WheelRadius/7,this.WheelRadius/7,4,12);
+        hub.rotateX(Math.PI/2);
+        const gArray = [new THREE.ExtrudeGeometry(wheelRim, extrudeSettings),
+                    hub.toNonIndexed()];
+        gArray[0].translate(0,0,-2);
+        let spokes = [];
+        for(let n = 0; n < 5; n++){
+            spokes.push(new THREE.CylinderGeometry(1.5,1.5,this.WheelRadius-5,8));
+            spokes[n].translate(0,this.WheelRadius/2 - 2,0);
+            spokes[n].rotateZ(n*Math.PI*0.4);
+            spokes[n] = spokes[n].toNonIndexed();
+        }
+        return THREE.BufferGeometryUtils.mergeBufferGeometries(gArray.concat(spokes));
+    }
+
     setBodyColour(c){
         //this.bodyMat = new THREE.MeshPhongMaterial({color: c, specular: 0x505050, shininess: 50});// 10, flatShading: true  });
         this.bodyMat = new THREE.MeshPhysicalMaterial({color: c, roughness: 0.35, metalness: 0.1, reflectivity: 0.15});
-        if(this.isLoaded){
-            //this.body1.material = this.bodyMat;
+        if(this.isLoaded)
             this.body2.material = this.bodyMat;
-            this.body3.material = this.bodyMat;
-        }
     }
     setWheelColour(c){
         this.wheelMat = new THREE.MeshLambertMaterial({reflectivity: 1, color: c});
@@ -186,16 +178,14 @@ class RobotShape extends THREE.Group{
             this.robotLength = params.length;
             this.NumberOfSensors = params.NumberOfSensors;
             this.SensorSpacing = params.SensorSpacing;
-            this.checkSize();     
-            /*this.body1.geometry.dispose();       
-            this.body1.geometry = new THREE.BoxGeometry(40, this.robotWidth-10, 20);*/
+            this.WheelRadius = params.WheelRadius;            
+            this.checkSize();
             this.body2.geometry.dispose();
             this.body2.geometry = this.makeBodyGeometry();       
-            this.Rw.position.set(0,this.robotWidth/2,-20);
-            this.Lw.position.set(0,-this.robotWidth/2,-20);                 
-/*            this.body3.geometry.dispose();
-            this.body3.geometry = new THREE.BoxGeometry(14, 14 + this.SensorSpacing*(this.NumberOfSensors-1), 3);
-            this.body3.position.set(this.robotLength, 0, -10);*/
+            this.Rw.geometry = this.makeWheelGeometry();            
+            this.Lw.geometry = this.makeWheelGeometry();            
+            this.Rw.position.set(0,this.robotWidth/2,-this.WheelRadius);
+            this.Lw.position.set(0,-this.robotWidth/2,-this.WheelRadius);                 
             this.body4.position.set(this.robotLength - 20, 0, -5);
             this.body5.position.set(this.robotLength - 20, 0, -7.5);
             for(var n = 0; n < MAXSENSORS; n++){
