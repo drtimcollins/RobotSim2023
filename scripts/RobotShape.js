@@ -70,16 +70,16 @@ class RobotShape extends THREE.Group{
     makeBodyGeometry(){
         var body2g = new THREE.BufferGeometry();
         body2g.setAttribute('position', new THREE.BufferAttribute( new Float32Array([
-            20, this.robotWidth/2-5, -10, //0
-            20, this.robotWidth/2-5, -this.WheelRadius-10, //1
+            this.WheelRadius, this.robotWidth/2-5, -10, //0
+            this.WheelRadius, this.robotWidth/2-5, -this.WheelRadius-10, //1
             this.robotLength-7, 5, -11.5,   //2
             this.robotLength-7, -5, -11.5,  //3
-            20, -this.robotWidth/2+5, -this.WheelRadius-10,  //4
-            20, -this.robotWidth/2+5, -10,  //5
-            -20, this.robotWidth/2-5, -this.WheelRadius-10,  //6
-            -20, -this.robotWidth/2+5, -this.WheelRadius-10,   //7
-            -20, this.robotWidth/2-5, -10,  //8
-            -20, -this.robotWidth/2+5, -10,   //9
+            this.WheelRadius, -this.robotWidth/2+5, -this.WheelRadius-10,  //4
+            this.WheelRadius, -this.robotWidth/2+5, -10,  //5
+            -this.WheelRadius, this.robotWidth/2-5, -this.WheelRadius-10,  //6
+            -this.WheelRadius, -this.robotWidth/2+5, -this.WheelRadius-10,   //7
+            -this.WheelRadius, this.robotWidth/2-5, -10,  //8
+            -this.WheelRadius, -this.robotWidth/2+5, -10,   //9
             this.robotLength-7, -7-this.SensorSpacing*(this.NumberOfSensors-1)/2, -11.5,
             this.robotLength-7, -7-this.SensorSpacing*(this.NumberOfSensors-1)/2, -8.5,
             this.robotLength+7, -7-this.SensorSpacing*(this.NumberOfSensors-1)/2, -11.5,

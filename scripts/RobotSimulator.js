@@ -370,8 +370,8 @@ function uploadDesign(event){
         $('#inputLength').val(o.length);
         $('#sliderWidth').val(o.width);
         $('#inputWidth').val(o.width);        
-        $('#sliderWheelRadius').val(o.WheelRadius);
-        $('#inputWheelRadius').val(o.WheelRadius);                
+        $('#sliderWheelDiameter').val(o.WheelRadius*2);
+        $('#inputWheelDiameter').val(o.WheelRadius*2);                
         $('#sliderSpacing').val(o.SensorSpacing);
         $('#inputSpacing').val(o.SensorSpacing);
         $('#sliderNumSensors').val(o.NumberOfSensors);
