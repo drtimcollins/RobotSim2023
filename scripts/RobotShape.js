@@ -200,8 +200,8 @@ class RobotShape extends THREE.Group{
     checkSize(){
         let p0 = new THREE.Vector2(7 + this.robotLength, 7 + this.SensorSpacing*(this.NumberOfSensors-1)/2); // Front Edge of sensors
         let p3 = new THREE.Vector2(-7 + this.robotLength, 7 + this.SensorSpacing*(this.NumberOfSensors-1)/2); // Back Edge of sensors
-        let p1 = new THREE.Vector2(-20, this.robotWidth/2 + 4);                                              // Back of wheel
-        let p2 = new THREE.Vector2(20, this.robotWidth/2 + 4);                                               // Front of wheel
+        let p1 = new THREE.Vector2(-this.WheelRadius, this.robotWidth/2 + 4);                                              // Back of wheel
+        let p2 = new THREE.Vector2(this.WheelRadius, this.robotWidth/2 + 4);                                               // Front of wheel
         this.xOffset = (p1.lengthSq() - p0.lengthSq()) / 2 / (p1.x - p0.x);
         let org = new THREE.Vector2(this.xOffset, 0);
         this.radius = p0.distanceTo(org);
@@ -218,7 +218,7 @@ class RobotShape extends THREE.Group{
             }
         }
         //this.sizeOK = (this.radius <= 130);
-        this.sizeOK = (this.robotWidth <= 132 && this.robotLength <= 193 && this.SensorSpacing*(this.NumberOfSensors-1) < 126);
+        this.sizeOK = (this.robotWidth <= 132 && this.robotLength <= 213-this.WheelRadius && this.SensorSpacing*(this.NumberOfSensors-1) < 126);
     }
 }
 

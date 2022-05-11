@@ -11,6 +11,6 @@ Preview: https://drtimcollins.github.io/RobotSim2023/robotSimulator.html
 - ~~Update to use latest Three.js lib (currently not compatible)~~
 - Add SCORM wrapper
 - Add 'gear-ratio' option?
-- Add wheel diameter slider?
+- ~~Add wheel diameter slider?~~
 - Add analogue sensor response (on/off at present)
 
