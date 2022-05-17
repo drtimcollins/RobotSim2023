@@ -74,18 +74,23 @@ class RobotScene extends THREE.Scene{
             new THREE.MeshLambertMaterial( {map: texSocket} )));
         this.room[9].rotateX(Math.PI/2);
         this.room[9].rotateZ(Math.PI);
-        this.room.push(this.room[9].clone());
+        for(let n = 0; n < 3; n++)
+            this.room.push(this.room[9].clone());
         this.room[9].position.set(params.width/2-2225,params.height/2+2995,300);
         this.room[10].position.set(params.width/2+1300,params.height/2+2995,300);
-    
+        this.room[11].rotateY(Math.PI/2);
+        this.room[11].position.set(params.width/2+2995,params.height/2+2225,300);
+        this.room[12].rotateY(Math.PI/2);
+        this.room[12].position.set(params.width/2+2995,params.height/2-2225,300);
+
         for(let n = 0; n < this.room.length; n++)
             this.add( this.room[n] );
 
         for(let n = 0; n < 4; n++){
             var light = new THREE.PointLight( 0xa0a0a0, 0.1);
-//            var light = new THREE.SpotLight( 0xffffff, 0.1, 0, 0.5, 0.1, 1.5);
-//            light.angle = Math.PI / 4;
- //           light.distance = 5000;
+/*            var light = new THREE.SpotLight( 0xffffff, 0.1, 0, 0.5, 0.1, 1.5);
+            light.angle = Math.PI / 4;
+            light.distance = 5000;*/
     
             light.position.set( (n%2)*params.width, Math.floor(n/2)*params.height, -1200);
             light.castShadow = true;        

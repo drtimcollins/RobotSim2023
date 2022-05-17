@@ -26,6 +26,7 @@ var robot, rec, laps, editor;
 var lastTime, bestTime, isRaceOver;
 var splitTime, splitFrameCount;
 var scenes, cpps;
+var stats;
 
 // Start-up initialisation
 $(function(){  
@@ -76,6 +77,9 @@ $(function(){
     $("#selectFiles").bind('input',function(e) {
        console.log("IINPUTT");
     });
+
+    stats = new Stats();
+    $("#renderWin").append(stats.dom);
 
     onResize();
     update(0);
@@ -183,7 +187,8 @@ function update() {
 
     camera.update();
     renderer.render( scene, camera );
-
+    
+    stats.update();
     requestAnimationFrame( update );
 }
 
