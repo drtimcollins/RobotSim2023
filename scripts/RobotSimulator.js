@@ -141,7 +141,9 @@ function update() {
     // Set visibility
     scene.trackMesh.visible = (dmode == dispMode.RACE);
     scene.gridHelper.visible = scene.turntableTop.visible = scene.turntable.visible = !(dmode == dispMode.RACE);
-    scene.background = scene.bgList[(dmode == dispMode.RACE)?1:0];
+    //scene.background = scene.bgList[(dmode == dispMode.RACE)?1:0];
+    scene.room.forEach(function(v){v.visible = (dmode == dispMode.RACE);});
+
     let frameCount = getFrameCount();
 
     if(dmode == dispMode.RACE){

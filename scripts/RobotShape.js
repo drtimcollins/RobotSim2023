@@ -26,6 +26,8 @@ class RobotShape extends THREE.Group{
 
         this.setBodyColour(0x2070D0);
         this.body2 = new THREE.Mesh(this.makeBodyGeometry(), this.bodyMat);
+        //this.body2.rotateX(Math.PI); ////////////////////////////////////////!!!!!!!!!!!!
+        //this.body2.position.set(0,0,-50);
         this.body2.castShadow = true;
         // body4/5 - caster
         this.body4 = new THREE.Mesh(new THREE.SphereGeometry(5, 12, 8,  0, 2*Math.PI, 0, Math.PI/2), 
@@ -93,7 +95,7 @@ class RobotShape extends THREE.Group{
         ]), 3 ) );
         body2g.setIndex([0,2,1, 2,0,18, 3,1,2, 3,4,1, 3,19,5, 3,5,4, 0,5,3, 0,3,2, 1,7,6, 4,7,1,
             7,4,9, 5,9,4, 6,8,1, 0,1,8, 6,7,8, 7,9,8, 10,12,11, 12,13,11, 12,16,13, 16,17,13,
-            16,14,17, 14,15,17, 14,10,15, 10,11,15, 16,12,14, 12,10,14]);
+            16,14,17, 14,15,17, 14,10,15, 10,11,15, 16,12,14, 12,10,14, 11,13,15, 13,17,15, 8,9,0, 9,5,0]);
         body2g.computeVertexNormals();
         return body2g;
     }
