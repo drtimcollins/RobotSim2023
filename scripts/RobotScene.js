@@ -20,58 +20,64 @@ class RobotScene extends THREE.Scene{
             new THREE.MeshBasicMaterial( {map: texCarpet} ) ));
         this.room[0].rotateX(-Math.PI);
         this.room[0].position.set(params.width/2,params.height/2,800);
-/*        const texCeil = new THREE.TextureLoader().load('img/textures/ceil.png');
-        texCeil.wrapS = THREE.RepeatWrapping;
-        texCeil.wrapT = THREE.RepeatWrapping;
-        texCeil.repeat.set( 10, 10 ); 
-        this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 6000, 6000 ), 
-            new THREE.MeshBasicMaterial( {map: texCeil} ) ));
-        this.room[1].position.set(params.width/2,params.height/2,-2000);*/
-
-        this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 6000, 2500 ), 
-            new THREE.MeshLambertMaterial( {color: 0xfffff4} ) ));
-        this.room[1].rotateX(-Math.PI/2);
-        this.room[1].position.set(params.width/2,params.height/2-3000,800-1250);
-        this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 6000, 2500 ), 
-            new THREE.MeshLambertMaterial( {color: 0xfffff4} ) ));
-        this.room[2].rotateX(Math.PI/2);
-        this.room[2].position.set(params.width/2,params.height/2+3000,800-1250);
-        this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 2500, 6000 ), 
-            new THREE.MeshLambertMaterial( {color: 0xfffff4} ) ));
-        this.room[3].rotateY(-Math.PI/2);
-        this.room[3].position.set(params.width/2+3000,params.height/2,800-1250);
-        //this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 2500, 6000 ), 
-        //    new THREE.MeshLambertMaterial( {color: 0xfffff4} ) ));
-        //this.room[4].rotateY(Math.PI/2);
-        //this.room[4].position.set(params.width/2-3000,params.height/2,800-1250);
 
         const wallShape = new THREE.Shape().moveTo(-1250,-3000).lineTo(-1250,3000).lineTo(1250,3000).lineTo(1250,-3000).lineTo(-1250,-3000);
         const window1 = new THREE.Path().moveTo(-350,-2750).lineTo(-350,-250).lineTo(950,-250).lineTo(950,-2750).lineTo(-350,-2750);
         const window2 = new THREE.Path().moveTo(-350,2750).lineTo(-350,250).lineTo(950,250).lineTo(950,2750).lineTo(-350,2750);
         wallShape.holes = [window1, window2];
-        this.room.push(new THREE.Mesh(new THREE.ExtrudeGeometry(wallShape,{depth:200, bevelEnabled: false}), 
-            new THREE.MeshLambertMaterial( {color: 0xa0a0a0} ) ));
-        this.room[4].rotateY(Math.PI/2);
-        this.room[4].position.set(params.width/2-3200,params.height/2,800-1250);
-/*        const wallShape = new THREE.Shape().moveTo(-125,-300).lineTo(-125,300).lineTo(125,300).lineTo(125,-300).lineTo(-125,-300);
-        const window1 = new THREE.Path().moveTo(-35,-275).lineTo(-35,-25).lineTo(95,-25).lineTo(95,-275).lineTo(-35,-275);
-        const window2 = new THREE.Path().moveTo(-35,275).lineTo(-35,25).lineTo(95,25).lineTo(95,275).lineTo(-35,275);
-        wallShape.holes = [window1, window2];
-        this.room.push(new THREE.Mesh(new THREE.ExtrudeGeometry(wallShape,{depth:20, bevelEnabled: false}), 
-            new THREE.MeshLambertMaterial( {color: 0xa0a0a0} ) ));
-        this.room[4].rotateY(Math.PI/2);
-        this.room[4].position.set(params.width/2,params.height/2,800-1250);*/
-
         const texBlind = new THREE.TextureLoader().load('img/textures/blind.png');        
         texBlind.wrapS = THREE.RepeatWrapping;
         texBlind.wrapT = THREE.RepeatWrapping;
         texBlind.repeat.set( 20, 5 );
-        this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 1300, 6000 ), 
+        const texDoor = new THREE.TextureLoader().load('img/textures/door.png');        
+        const texSocket = new THREE.TextureLoader().load('img/textures/socket.png');        
+        const skirtingShape = new THREE.Shape().moveTo(2650,2985).lineTo(2985,2985).lineTo(2985,-2985).lineTo(-2985,-2985).lineTo(-2985,2985).lineTo(1800,2985)
+            .lineTo(1800,3100).lineTo(-3100,3100).lineTo(-3100,-3100).lineTo(3100,-3100).lineTo(3100,3100).lineTo(2650,3100).lineTo(2650,2985);
+
+        this.room.push(new THREE.Mesh(new THREE.ExtrudeGeometry(wallShape,{depth:200, bevelEnabled: false}), 
+            new THREE.MeshLambertMaterial( {color: 0xfffff0} ) ));
+        this.room[1].rotateX(-Math.PI/2);
+        this.room[1].rotateZ(Math.PI/2);
+        this.room[1].position.set(params.width/2,params.height/2-3200,800-1250);
+        this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 6000, 2500 ), 
+            new THREE.MeshLambertMaterial( {color: 0xfffff0} ) ));
+        this.room[2].rotateX(Math.PI/2);
+        this.room[2].position.set(params.width/2,params.height/2+3000,800-1250);
+        this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 2500, 6000 ), 
+            new THREE.MeshLambertMaterial( {color: 0xfafaeb} ) ));
+        this.room[3].rotateY(-Math.PI/2);
+        this.room[3].position.set(params.width/2+3000,params.height/2,800-1250);
+        this.room.push(new THREE.Mesh(new THREE.ExtrudeGeometry(wallShape,{depth:200, bevelEnabled: false}), 
+            new THREE.MeshLambertMaterial( {color: 0xfffaeb} ) ));
+        this.room[4].rotateY(Math.PI/2);
+        this.room[4].position.set(params.width/2-3200,params.height/2,800-1250);
+
+        this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 6000, 1400 ), 
             new THREE.MeshLambertMaterial( {map: texBlind} ) ));
         this.room[5].rotateY(Math.PI/2);
-        this.room[5].position.set(params.width/2-3200,params.height/2,800-1250-300);
+        this.room[5].rotateZ(-Math.PI/2);
+        this.room[5].position.set(params.width/2-3200,params.height/2,800-1250-350);
+        this.room.push(new THREE.Mesh( new THREE.PlaneGeometry( 6000, 1400 ), 
+            new THREE.MeshLambertMaterial( {map: texBlind} ) ));
+        this.room[6].rotateX(-Math.PI/2);
+        this.room[6].position.set(params.width/2,params.height/2-3200,800-1250-350);
 
-
+        this.room.push(new THREE.Mesh(new THREE.PlaneGeometry(850,2000),
+            new THREE.MeshLambertMaterial( {map: texDoor} )));
+        this.room[7].rotateX(Math.PI/2);
+        this.room[7].rotateZ(Math.PI);
+        this.room[7].position.set(params.width/2+2225,params.height/2+2998,-200);
+        this.room.push(new THREE.Mesh(new THREE.ExtrudeGeometry(skirtingShape,{depth:100, bevelEnabled: false}), 
+            new THREE.MeshLambertMaterial( {color: 0x404040} ) ));
+        this.room[8].position.set(params.width/2, params.height/2, 700);
+        this.room.push(new THREE.Mesh(new THREE.PlaneGeometry(146,86),
+            new THREE.MeshLambertMaterial( {map: texSocket} )));
+        this.room[9].rotateX(Math.PI/2);
+        this.room[9].rotateZ(Math.PI);
+        this.room.push(this.room[9].clone());
+        this.room[9].position.set(params.width/2-2225,params.height/2+2995,300);
+        this.room[10].position.set(params.width/2+1300,params.height/2+2995,300);
+    
         for(let n = 0; n < this.room.length; n++)
             this.add( this.room[n] );
 

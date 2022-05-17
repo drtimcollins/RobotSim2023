@@ -3,7 +3,7 @@ const TPrange = 200;
 class SmartCam extends THREE.PerspectiveCamera{
     constructor(scene, robot){
         const initFov = 30;
-        super(initFov, scene.width/scene.height, 1, 12000);
+        super(initFov, scene.width/scene.height, 1, 5000);
         //this.fov = initFov;        
         this.trackWidth = scene.width;
         this.trackHeight = scene.height;
