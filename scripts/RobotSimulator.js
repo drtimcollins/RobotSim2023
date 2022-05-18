@@ -143,7 +143,8 @@ function getFrameCount(){
 
 function update() {
     // Set visibility
-    scene.trackMesh.visible = (dmode == dispMode.RACE);
+    scene.trackMesh.visible = scene.trackBase.visible = (dmode == dispMode.RACE);
+    for(let n = 0; n < 4; n++) scene.legs[n].visible = scene.trackBase.visible;
     scene.gridHelper.visible = scene.turntableTop.visible = scene.turntable.visible = !(dmode == dispMode.RACE);
     //scene.background = scene.bgList[(dmode == dispMode.RACE)?1:0];
     scene.room.forEach(function(v){v.visible = (dmode == dispMode.RACE);});

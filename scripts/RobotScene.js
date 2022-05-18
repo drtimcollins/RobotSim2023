@@ -30,7 +30,13 @@ class RobotScene extends THREE.Scene{
         texBlind.wrapT = THREE.RepeatWrapping;
         texBlind.repeat.set( 20, 5 );
         const texDoor = new THREE.TextureLoader().load('img/textures/door.png');        
-        const texSocket = new THREE.TextureLoader().load('img/textures/socket.png');        
+        const texSocket = new THREE.TextureLoader().load('img/textures/socket.png');  
+        const texWoodSide = new THREE.TextureLoader().load('img/textures/woodSide.jpg');
+        texWoodSide.wrapS = THREE.RepeatWrapping;
+        texWoodSide.repeat.set( 8, 1 );
+        const texWoodLeg = new THREE.TextureLoader().load('img/textures/woodLeg.jpg');
+        texWoodLeg.wrapT = THREE.RepeatWrapping;
+        texWoodLeg.repeat.set( 1, 3 );
         const skirtingShape = new THREE.Shape().moveTo(2650,2985).lineTo(2985,2985).lineTo(2985,-2985).lineTo(-2985,-2985).lineTo(-2985,2985).lineTo(1800,2985)
             .lineTo(1800,3100).lineTo(-3100,3100).lineTo(-3100,-3100).lineTo(3100,-3100).lineTo(3100,3100).lineTo(2650,3100).lineTo(2650,2985);
 
@@ -88,9 +94,6 @@ class RobotScene extends THREE.Scene{
 
         for(let n = 0; n < 4; n++){
             var light = new THREE.PointLight( 0xa0a0a0, 0.1);
-/*            var light = new THREE.SpotLight( 0xffffff, 0.1, 0, 0.5, 0.1, 1.5);
-            light.angle = Math.PI / 4;
-            light.distance = 5000;*/
     
             light.position.set( (n%2)*params.width, Math.floor(n/2)*params.height, -1200);
             light.castShadow = true;        
@@ -105,14 +108,9 @@ class RobotScene extends THREE.Scene{
             light.shadow.camera.near = 100;
             light.shadow.radius = 3;
             this.add( light );
-//            this.add(light.target);
             this.lights.push(light);
-//            this.lights[n].target.position.set(params.width/2, params.height/2,0);
         }
         this.add( new THREE.AmbientLight(0xc0c0c0));
-//        this.add( new THREE.AmbientLight(0xC8C8C8));
-
-
 
         this.trackMesh = new THREE.Group();
         // White Base
@@ -152,6 +150,18 @@ class RobotScene extends THREE.Scene{
 //        this.gridHelper.position.set(params.width/2, params.height/2,-.5);
         this.add( this.gridHelper );
 
+        this.trackBase = new THREE.Mesh(new THREE.BoxGeometry(params.width, params.height, 60), 
+            new THREE.MeshLambertMaterial( {map: texWoodSide} ) );
+        this.trackBase.position.set(params.width/2, params.height/2, 32);
+        this.add(this.trackBase);
+        this.legs = [];
+        const legMesh = new THREE.Mesh(new THREE.BoxGeometry(50, 50, 790), 
+            new THREE.MeshLambertMaterial( {map: texWoodLeg} ) );
+        for(let n = 0; n < 4; n++){
+            this.legs.push(legMesh.clone());
+            this.legs[n].position.set( (n%2)*(params.width-100)+50, Math.floor(n/2)*(params.height-100)+50, 420);
+            this.add(this.legs[n]);
+        }
 
         // Track
         var loader = new THREE.PLYLoader();
