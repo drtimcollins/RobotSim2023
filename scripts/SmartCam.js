@@ -36,12 +36,16 @@ class SmartCam extends THREE.PerspectiveCamera{
         const cPos2 = this.robot.shape.position.clone(); cPos2.z = 1;
         //const cPos3 = this.robot.shape.position.clone().add(new THREE.Vector3(500*this.robot.dv.x,500*this.robot.dv.y,1));
         //const cPos3 = this.robot.shape.position.clone().add(new THREE.Vector3(500*this.robot.pose.bearing.x,500*this.robot.pose.bearing.y,1));
-        const cPos3 = this.robot.shape.position.clone().add(new THREE.Vector3(500*Math.cos(this.robot.shape.rotation.z),500*Math.sin(this.robot.shape.rotation.z),1));
+        
+        const cPos3Distance = 3.7*(this.robot.shape.robotLength - this.robot.shape.WheelRadius) + 20;
+        const cPos3 = this.robot.shape.position.clone().add(new THREE.Vector3(cPos3Distance*Math.cos(this.robot.shape.rotation.z),cPos3Distance*Math.sin(this.robot.shape.rotation.z),1));
+//        const cPos3 = this.robot.shape.position.clone().add(new THREE.Vector3(500*Math.cos(this.robot.shape.rotation.z),500*Math.sin(this.robot.shape.rotation.z),1));
         this.camTarget.position.copy(cPos1.multiplyScalar(this.aPan.a[0] + this.aPan.a[2] + this.aPan.a[6])).add(cPos2.multiplyScalar(this.aPan.a[1] + this.aPan.a[3] + this.aPan.a[4])).add(cPos3.multiplyScalar(this.aPan.a[5]));
                 
         const pos1 = this.TPcamPos.clone();
         const pos2 = new THREE.Vector3(this.camTarget.position.x, this.camTarget.position.y + ycam*(1-0.5*this.follow), zcam*(1-0.5*this.follow)); 
-        const pos3 = this.robot.shape.position.clone().add(new THREE.Vector3(0,0,-60));
+        //const pos3 = this.robot.shape.position.clone().add(new THREE.Vector3(0,0,-60));
+        const pos3 = this.robot.shape.position.clone().add(new THREE.Vector3(this.robot.shape.WheelRadius * Math.cos(this.robot.shape.rotation.z),this.robot.shape.WheelRadius * Math.sin(this.robot.shape.rotation.z),-this.robot.shape.WheelRadius-20));
         const pos4 = new THREE.Vector3(this.camTarget.position.x, this.camTarget.position.y + this.trackHeight/1.7, -this.trackHeight/2.5); 
 
         this.position.copy(pos1.multiplyScalar(this.aPan.a[4]).add(pos2.multiplyScalar(this.aPan.a[0]+this.aPan.a[1]+this.aPan.a[2]+this.aPan.a[3]).add(pos3.multiplyScalar(this.aPan.a[5]).add(pos4.multiplyScalar(this.aPan.a[6])))));
