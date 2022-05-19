@@ -4,7 +4,7 @@
 Based on **RobotSim2020**
 Online JS version of line-following robot sim. C control code is compiled and results shown in 3D rendering.
 
-Preview: https://drtimcollins.github.io/RobotSim2023/robotSimulator.html
+Preview: <https://drtimcollins.github.io/RobotSim2023/robotSimulator.html>
 
 ## To-do
 - ~~Tidy source and files~~

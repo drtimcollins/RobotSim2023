@@ -22,8 +22,8 @@ class RobotScene extends THREE.Scene{
         this.room[0].position.set(params.width/2,params.height/2,800);
 
         const wallShape = new THREE.Shape().moveTo(-1250,-3000).lineTo(-1250,3000).lineTo(1250,3000).lineTo(1250,-3000).lineTo(-1250,-3000);
-        const window1 = new THREE.Path().moveTo(-350,-2750).lineTo(-350,-250).lineTo(950,-250).lineTo(950,-2750).lineTo(-350,-2750);
-        const window2 = new THREE.Path().moveTo(-350,2750).lineTo(-350,250).lineTo(950,250).lineTo(950,2750).lineTo(-350,2750);
+        const window1 = new THREE.Path().moveTo(-350,-2750).lineTo(-350,-150).lineTo(950,-150).lineTo(950,-2750).lineTo(-350,-2750);
+        const window2 = new THREE.Path().moveTo(-350,2750).lineTo(-350,150).lineTo(950,150).lineTo(950,2750).lineTo(-350,2750);
         wallShape.holes = [window1, window2];
         const texBlind = new THREE.TextureLoader().load('img/textures/blind.png');        
         texBlind.wrapS = THREE.RepeatWrapping;
@@ -68,11 +68,11 @@ class RobotScene extends THREE.Scene{
         this.room[6].rotateX(-Math.PI/2);
         this.room[6].position.set(params.width/2,params.height/2-3200,800-1250-350);
 
-        this.room.push(new THREE.Mesh(new THREE.PlaneGeometry(850,2000),
+        this.room.push(new THREE.Mesh(new THREE.PlaneGeometry(970, 2060), //850,2000),
             new THREE.MeshLambertMaterial( {map: texDoor} )));
         this.room[7].rotateX(Math.PI/2);
         this.room[7].rotateZ(Math.PI);
-        this.room[7].position.set(params.width/2+2225,params.height/2+2998,-200);
+        this.room[7].position.set(params.width/2+2225,params.height/2+2998,-230);
         this.room.push(new THREE.Mesh(new THREE.ExtrudeGeometry(skirtingShape,{depth:100, bevelEnabled: false}), 
             new THREE.MeshLambertMaterial( {color: 0x404040} ) ));
         this.room[8].position.set(params.width/2, params.height/2, 700);
@@ -88,6 +88,16 @@ class RobotScene extends THREE.Scene{
         this.room[11].position.set(params.width/2+2995,params.height/2+2225,300);
         this.room[12].rotateY(Math.PI/2);
         this.room[12].position.set(params.width/2+2995,params.height/2-2225,300);
+        this.room.push(new THREE.Mesh(new THREE.BoxGeometry(2700,230,40), 
+            new THREE.MeshLambertMaterial( {color: 0xf0f0f0} ) ));
+        this.room.push(this.room[13].clone());
+        this.room[13].position.set(params.width/2+1450, params.height/2-3085, -100);
+        this.room[14].position.set(params.width/2-1450, params.height/2-3085, -100);
+        this.room.push(new THREE.Mesh(new THREE.BoxGeometry(230,2700,40), 
+            new THREE.MeshLambertMaterial( {color: 0xf0f0f0} ) ));
+        this.room.push(this.room[15].clone());
+        this.room[15].position.set(params.width/2-3085, params.height/2+1450, -100);
+        this.room[16].position.set(params.width/2-3085, params.height/2-1450, -100);
 
         for(let n = 0; n < this.room.length; n++)
             this.add( this.room[n] );
