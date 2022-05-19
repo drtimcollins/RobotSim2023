@@ -37,8 +37,8 @@ class RobotScene extends THREE.Scene{
         const texWoodLeg = new THREE.TextureLoader().load('img/textures/woodLeg.jpg');
         texWoodLeg.wrapT = THREE.RepeatWrapping;
         texWoodLeg.repeat.set( 1, 3 );
-        const skirtingShape = new THREE.Shape().moveTo(2650,2985).lineTo(2985,2985).lineTo(2985,-2985).lineTo(-2985,-2985).lineTo(-2985,2985).lineTo(1800,2985)
-            .lineTo(1800,3100).lineTo(-3100,3100).lineTo(-3100,-3100).lineTo(3100,-3100).lineTo(3100,3100).lineTo(2650,3100).lineTo(2650,2985);
+        const skirtingShape = new THREE.Shape().moveTo(2710,2985).lineTo(2985,2985).lineTo(2985,-2985).lineTo(-2985,-2985).lineTo(-2985,2985).lineTo(1740,2985)
+            .lineTo(1740,3100).lineTo(-3100,3100).lineTo(-3100,-3100).lineTo(3100,-3100).lineTo(3100,3100).lineTo(2710,3100).lineTo(2710,2985);
 
         this.room.push(new THREE.Mesh(new THREE.ExtrudeGeometry(wallShape,{depth:200, bevelEnabled: false}), 
             new THREE.MeshLambertMaterial( {color: 0xfffff0} ) ));
