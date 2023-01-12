@@ -6,6 +6,7 @@ import { RobotSim } from './RobotSim.js';
 import { RobotGui } from './RobotGui.js';
 import { SmartCam } from './SmartCam.js';
 import { RobotCompiler } from './RobotCompiler.js';
+import { Stats } from './Stats.js';
 
 const dispMode = {DESIGN:1, RACE:2};
 var dmode = dispMode.DESIGN;
@@ -79,7 +80,7 @@ $(function(){
     });
 
     stats = new Stats();
-    $("#renderWin").append(stats.dom);
+    //$("#renderWin").append(stats.dom);
 
     onResize();
     update(0);
