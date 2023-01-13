@@ -35,9 +35,7 @@ class RobotGui{
     }
 
     refillIcons(){
-        for(let i = 0; i < 6; i++){
-            this.b[i].bg.fill = '#FAFAFF';
-        }        
+        this.b.forEach(x => x.bg.fill = '#FAFAFF');     
         if(this.isSloMo) this.b[5].bg.fill = '#FFFFAA';
         this.b[this.camMode].bg.fill = '#FFFFAA';
         this.b[this.camZoom + 3].bg.fill = '#FFFFAA';

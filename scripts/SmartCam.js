@@ -94,9 +94,10 @@ class AutoPanner {
         this.lastTarget = 0;
     }
     setTarget(newTargetIndex){
-        for(var n = 0; n < this.N; n++){
-            this.aTarget[n] = 0;
-        }
+       for(var n = 0; n < this.N; n++){
+           this.aTarget[n] = 0;
+       }
+        
         this.aTarget[newTargetIndex] = 1;
         this.lastTarget = newTargetIndex;
         this.isMoving = true;

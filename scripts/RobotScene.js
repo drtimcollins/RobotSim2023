@@ -99,8 +99,7 @@ class RobotScene extends THREE.Scene{
         this.room[15].position.set(params.width/2-3085, params.height/2+1450, -100);
         this.room[16].position.set(params.width/2-3085, params.height/2-1450, -100);
 
-        for(let n = 0; n < this.room.length; n++)
-            this.add( this.room[n] );
+        this.room.forEach(x => this.add(x));
 
         for(let n = 0; n < 4; n++){
             var light = new THREE.PointLight( 0xa0a0a0, 0.1);
