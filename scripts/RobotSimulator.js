@@ -28,6 +28,7 @@ var lastTime, bestTime, isRaceOver;
 var splitTime, splitFrameCount;
 var scenes, cpps;
 var stats;
+var lod = 0;    // Full detail - higher values reduce detail.
 
 // Start-up initialisation
 $(function(){  
@@ -186,11 +187,29 @@ function update() {
             robot.designShow(clk.getElapsedTime() * 50.0);
         }
     }
+    
+    // Change level of detail to maintian frame rate on low spec GPUs
+    stats.update();
+    if(stats.checkMe){
+        stats.checkMe = false;
+        if(stats.good && lod > 0) lod--;
+        if(stats.bad && lod < 3) lod++;
+    }
+    if(lod > 0){
+         scene.lights.forEach(l => l.castShadow = false);
+    } else {
+        scene.lights.forEach(l => l.castShadow = true);
+   }
+    if(lod > 1){
+        scene.room.forEach(l => l.visible = false);
+    }
+    if(lod > 2){
+         scene.trackBase.visible = false;
+         scene.legs.forEach(l => l.visible = false);
+    }
 
     camera.update();
     renderer.render( scene, camera );
-    
-    stats.update();
     requestAnimationFrame( update );
 }
 
