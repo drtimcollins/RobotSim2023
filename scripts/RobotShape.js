@@ -24,7 +24,7 @@ class RobotShape extends THREE.Group{
         this.Rw.castShadow=true;
         this.Lw.castShadow=true;
 
-        this.setBodyColour(0x2070D0);
+        this.setBodyColour(0x909090);  //0x2070D0
         this.body2 = new THREE.Mesh(this.makeBodyGeometry(), this.bodyMat);
         //this.body2.rotateX(Math.PI); ////////////////////////////////////////!!!!!!!!!!!!
         //this.body2.position.set(0,0,-50);
