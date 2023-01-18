@@ -19,7 +19,7 @@ class Stats{
 			this.fps = newfps;
 			this.prevTime = time;
 			this.frames = 0;
-			console.log(this.fps);
+			//console.log(this.fps);
 		}		
 		if ( time >= this.checkTime + 2000 && this.frames > 200) {
 			this.checkMe = true;

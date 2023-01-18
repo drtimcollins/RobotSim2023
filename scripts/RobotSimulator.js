@@ -195,12 +195,14 @@ function update() {
         stats.checkMe = false;
         if(stats.good && lod > 0) lod--;
         if(stats.bad && lod < 3) lod++;
+        console.log("FPS = " + stats.fps.toString());
+        console.log("LOD = " + lod.toString());     
     }
     if(lod > 0){
-         scene.lights.forEach(l => l.castShadow = false);
+         scene.lights.forEach(l => l.castShadow = false);     
     } else {
         scene.lights.forEach(l => l.castShadow = true);
-   }
+    }
     if(lod > 1){
         scene.room.forEach(l => l.visible = false);
     }
