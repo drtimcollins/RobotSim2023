@@ -1,4 +1,4 @@
-import { MAXSENSORS } from './RobotSimulator.js';
+//import { MAXSENSORS } from './RobotSimulator.js';
 
 class RobotCompiler{
 	constructor(){
@@ -185,17 +185,17 @@ function decodeHex(x, nSensors){
     return z;
 }
 function deHex(x, nSensors){
-    if(x.substr(0,1) == 'L') return x+"\n";
+    if(x.substring(0,1) == 'L') return x+"\n";
     else
-    return (hex2int(x.substr(0,4))/16+640).toString() + " " +
-            (hex2int(x.substr(4,4))/16+360).toString() + " " +
-            (Math.cos(hex2int(x.substr(8,4))/10000)).toString() + " " +
-            (Math.sin(hex2int(x.substr(8,4))/10000)).toString() + " " +
-            (Math.cos(hex2int(x.substr(12,4))/10000)).toString() + " " +
-            (Math.sin(hex2int(x.substr(12,4))/10000)).toString() + " " +
-            (Math.cos(hex2int(x.substr(16,4))/10000)).toString() + " " +
-            (Math.sin(hex2int(x.substr(16,4))/10000)).toString() + " " +
-            senseDec(x.substr(20,3), nSensors) + "\n";
+    return (hex2int(x.substring(0,4))/16+640).toString() + " " +
+            (hex2int(x.substring(4,8))/16+360).toString() + " " +
+            (Math.cos(hex2int(x.substring(8,12))/10000)).toString() + " " +
+            (Math.sin(hex2int(x.substring(8,12))/10000)).toString() + " " +
+            (Math.cos(hex2int(x.substring(12,16))/10000)).toString() + " " +
+            (Math.sin(hex2int(x.substring(12,16))/10000)).toString() + " " +
+            (Math.cos(hex2int(x.substring(16,20))/10000)).toString() + " " +
+            (Math.sin(hex2int(x.substring(16,20))/10000)).toString() + " " +
+            senseDec(x.substring(20,23), nSensors) + "\n";
 }
 function hex2int(s){
     let x = parseInt(s, 16);
@@ -203,8 +203,8 @@ function hex2int(s){
 }
 function senseDec(s, nSensors){
     let x = ("0000000000" + parseInt(s, 16).toString(2)).slice (-10);
-    let z = x.substr(nSensors-1,1);
-    for(let n = 1; n < nSensors; n++) z += " " + x.substr(nSensors-n-1,1)
+    let z = x.substring(nSensors-1,nSensors);
+    for(let n = 1; n < nSensors; n++) z += " " + x.substring(nSensors-n-1,nSensors-n)
     return z;
 }
 

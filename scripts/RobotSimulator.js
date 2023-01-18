@@ -346,13 +346,13 @@ function runCode(trackIndex){
                     var match;
                     while ((match = regex.exec(errs)) != null) {
                         let ln = parseInt(match[1]) - 143;
-                        errs = errs.substr(0,match.index+9)+ln.toString()+errs.substr(match.index+9+match[1].length);
+                        errs = errs.substring(0,match.index+9)+ln.toString()+errs.substring(match.index+9+match[1].length);
                         regex.lastIndex += match[1].length - ln.toString().length;
                     }
                     var regex2 = /  (\d\d\d) \|/g
                     while ((match = regex2.exec(errs)) != null) {
                         let ln = parseInt(match[1]) - 143;
-                        errs = errs.substr(0,match.index)+" ".repeat(5-ln.toString().length)+ln.toString()+errs.substr(match.index+5);
+                        errs = errs.substring(0,match.index)+" ".repeat(5-ln.toString().length)+ln.toString()+errs.substring(match.index+5);
                         regex2.lastIndex += match[1].length - ln.toString().length;
                     }
 
