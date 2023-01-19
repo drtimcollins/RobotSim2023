@@ -298,7 +298,7 @@ function runCode(trackIndex){
 //    if(robot.shape.radius > 125){
 //        $('#coutBox').text("Fail\nRobot is too big. Maximum diameter = 250mm, robot diameter = "+(robot.shape.radius*2.0).toFixed(1)+"mm\n"); 
     if(!robot.shape.sizeOK){
-        $('#coutBox').text("Fail\nRobot is too big. See spec for limits."); 
+        $('#coutBox').text("Fail\nRobot is too big. See the project specification for limits."); 
     } else {
         $('#progress').show();
         console.log("RUN CODE");    
