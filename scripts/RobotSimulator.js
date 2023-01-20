@@ -231,7 +231,7 @@ function getTimeString(ms){
 
 function onResize(){
     const w = $("#renderWin").width();
-    const pw = $("#progress").width();
+    //const pw = $("#progress").width();
     if(renderer != null){
         $("#renderWin").height(w*sceneParams[0].height/sceneParams[0].width);
         renderer.setSize(w, $("#renderWin").height());
@@ -239,9 +239,12 @@ function onResize(){
     if(gui != null){
         gui.resize(w);
     }
-    $("#progress").offset({        
-        top: ($("#renderWin").offset().top + $("#renderWin").height()/4)       
-	 }); 
+    //top: ($("#renderWin").offset().top + $("#renderWin").height()/4)
+//    $("#progress").offset({ 
+//        top: ($(window).height()/4)
+//        top: 100
+//	 }); 
+    $("#progress").css("top",$(window).height()/4);
      console.log("Height: " + $(document).get(0).body.scrollHeight);
      parent.postMessage($(document).get(0).body.scrollHeight, "*");
 }
@@ -305,6 +308,7 @@ function runCode(trackIndex){
         cpp = cpps[trackIndex];
         if(cpp.isInit) {
             cpp.updateParams(robotParams);
+            setTimeout(function(){
             cpp.exe(editor.getValue(), function(data){
                 if(data.Errors == null){
                     $('#coutBox').text(data.Stats);
@@ -361,7 +365,7 @@ function runCode(trackIndex){
                     $('#coutBox').text('Program Build Failed\n'+errs.replace("RobotControlCode::",""));
                 }
                 $('#progress').hide();
-            });
+            });}, 100);
         }
     }
 }
