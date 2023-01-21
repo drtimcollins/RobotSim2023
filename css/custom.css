@@ -36,8 +36,6 @@ img {
 	margin-right: auto 
 }
 
-
-
 textarea {
 	font-size: 1.2rem;
 	resize: none;
@@ -122,25 +120,6 @@ div label
 	font-weight:normal;
 }
 
-
-#progress {
-	font-family: "Roboto", Helvetica, Arial, sans-serif;	
-	width: 100%;
-	font-size: 1.5rem;
-	font-weight: bold;
-	position: fixed;
-	top: 100px;	
-	z-index: 100;
-	text-align: center;
-	display: none;		
-}
-.progressBox{
-	margin:auto;
-	background-color: #ffffff;
-	border-radius: 25px;
-	border: 2px solid #2cd1e7;
-	width: 250px;
-}
 .cLabel{
     vertical-align:middle;	
 	display:inline;
