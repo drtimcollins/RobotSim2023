@@ -25,27 +25,26 @@
 	window.addEventListener("message", (event) => {
 		console.log("Message");
 		console.log(event.data);
-		if (event.data == 0) { // Detects parent.postMessage(0, "*"); sent from child page to scroll to top
+		if (event.data == 0) {
 			var rect = $("#timsIframe").get(0).getBoundingClientRect();
 			var bodyRect = document.body.getBoundingClientRect();
 			//window.scrollTo(0, rect.top - bodyRect.top - 50);
-			console.log("iframe top: " + rect.top.toString());
-			console.log("win top: " + bodyRect.top.toString());
-			console.log("New Pos : " + (rect.top - bodyRect.top - 50).toString());
+			//console.log("iframe top: " + rect.top.toString());
+			//console.log("win top: " + bodyRect.top.toString());
+			//console.log("New Pos: " + (rect.top - bodyRect.top - 50).toString());
 			window.scrollTo(0, rect.top - bodyRect.top - 150);
-			console.log("Final pos :" + document.body.getBoundingClientRect().top.toString());
 		} else if(event.data == -1){
 			$("#progress").hide();
 		} else if(event.data == -2){
 			$("#progress").show();
-		} else { // Needs parent.postMessage($(document).get(0).body.scrollHeight, "*"); in child resize function
+		} else {
 			$('#timsIframe').height(50 + event.data);
 		}
 	});
 	function onResize(){
-		console.log("Outer on resize called.");
+		//console.log("Outer on resize called.");
 		let rect = $("#timsIframe").get(0).getBoundingClientRect();
-		console.log("Left: " + rect.width.toString());
+		//console.log("Left: " + rect.width.toString());
 		$("#progress").css("top",$(window).height()/4);
 		$("#progress").css("left",(rect.left + rect.right)/2 - 110);
 	}
