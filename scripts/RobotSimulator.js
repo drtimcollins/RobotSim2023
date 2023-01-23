@@ -120,7 +120,8 @@ function onIconClicked(i){
         $('#designerWin').show();         
         dmode = dispMode.DESIGN;
         robot.shape.refreshLEDs();
-        update(0);        
+        update(0);  
+        onResize();      
     }
     gui.refillIcons();
 }
@@ -342,6 +343,7 @@ function runCode(trackIndex){
                     scene = scenes[trackIndex];
                     robot.changeScene(scene);
                     camera.changeScene(scene);
+                    onResize();
                 } else { // Report Errors
                     var errs = data.Errors;
                     var regex = /main\.cpp:(\d+):/g
