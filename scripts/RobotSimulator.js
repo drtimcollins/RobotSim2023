@@ -263,7 +263,7 @@ function batchRun(){
                     isDone = false;
                     var o = oArray[idNum];
                     cpp = cpps[trNum];  // Loop this
-                    cpp.updateParams({width: o.width, length: o.length, NumberOfSensors: o.NumberOfSensors, SensorSpacing: o.SensorSpacing});
+                    cpp.updateParams({width: o.width, length: o.length, NumberOfSensors: o.NumberOfSensors, SensorSpacing: o.SensorSpacing, WheelRadius: o.WheelRadius});
                     console.log(o);
                     if(trNum == 0) $('#coutBox').text($('#coutBox').text() + '\n' + o.ID);
                     cpp.exe(o.Code, function(data){
