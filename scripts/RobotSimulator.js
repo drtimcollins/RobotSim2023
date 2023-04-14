@@ -120,7 +120,8 @@ function onIconClicked(i){
         $('#designerWin').show();         
         dmode = dispMode.DESIGN;
         robot.shape.refreshLEDs();
-        update(0);        
+        update(0);  
+        onResize();      
     }
     gui.refillIcons();
 }
@@ -148,8 +149,6 @@ function update() {
     scene.trackMesh.visible = scene.trackBase.visible = (dmode == dispMode.RACE);
     for(let n = 0; n < 4; n++) scene.legs[n].visible = scene.trackBase.visible;
     scene.gridHelper.visible = scene.turntableTop.visible = scene.turntable.visible = !(dmode == dispMode.RACE);
-    //scene.background = scene.bgList[(dmode == dispMode.RACE)?1:0];
-    //scene.room.forEach(function(v){v.visible = (dmode == dispMode.RACE);});
     scene.room.forEach(x => x.visible = (dmode == dispMode.RACE));
 
     let frameCount = getFrameCount();
@@ -231,7 +230,6 @@ function getTimeString(ms){
 
 function onResize(){
     const w = $("#renderWin").width();
-    const pw = $("#progress").width();
     if(renderer != null){
         $("#renderWin").height(w*sceneParams[0].height/sceneParams[0].width);
         renderer.setSize(w, $("#renderWin").height());
@@ -239,12 +237,13 @@ function onResize(){
     if(gui != null){
         gui.resize(w);
     }
-    $("#progress").offset({        
-        top: ($("#renderWin").offset().top + $("#renderWin").height()/4)       
-	 }); 
      console.log("Height: " + $(document).get(0).body.scrollHeight);
      parent.postMessage($(document).get(0).body.scrollHeight, "*");
 }
+function showProgress(isShow){
+    parent.postMessage(isShow ? -2 : -1, "*");
+}
+
 function batchRun(){
     console.log("Batch Run");
     var xmlhttp = new XMLHttpRequest();
@@ -298,13 +297,15 @@ function runCode(trackIndex){
 //    if(robot.shape.radius > 125){
 //        $('#coutBox').text("Fail\nRobot is too big. Maximum diameter = 250mm, robot diameter = "+(robot.shape.radius*2.0).toFixed(1)+"mm\n"); 
     if(!robot.shape.sizeOK){
-        $('#coutBox').text("Fail\nRobot is too big. See spec for limits."); 
+        $('#coutBox').text("Fail\nRobot is too big. See the project specification for limits."); 
     } else {
-        $('#progress').show();
+        //$('#progress').show();
+        showProgress(true);
         console.log("RUN CODE");    
         cpp = cpps[trackIndex];
         if(cpp.isInit) {
             cpp.updateParams(robotParams);
+            setTimeout(function(){
             cpp.exe(editor.getValue(), function(data){
                 if(data.Errors == null){
                     $('#coutBox').text(data.Stats);
@@ -342,6 +343,7 @@ function runCode(trackIndex){
                     scene = scenes[trackIndex];
                     robot.changeScene(scene);
                     camera.changeScene(scene);
+                    onResize();
                 } else { // Report Errors
                     var errs = data.Errors;
                     var regex = /main\.cpp:(\d+):/g
@@ -360,8 +362,9 @@ function runCode(trackIndex){
 
                     $('#coutBox').text('Program Build Failed\n'+errs.replace("RobotControlCode::",""));
                 }
-                $('#progress').hide();
-            });
+                //$('#progress').hide();
+                showProgress(false);
+            });}, 100);
         }
     }
 }
